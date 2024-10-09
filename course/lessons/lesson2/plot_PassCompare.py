@@ -21,7 +21,7 @@ parser = Sbopen()
 df_match = parser.match(competition_id=72, season_id=30)
 
 
-##############################################################################
+#%%
 # Preparing data
 # ----------------------------
 # For our task we need 2 different dataframes. The first one called *passshot_df*. In this dataframe we would like to keep information
@@ -94,7 +94,7 @@ for idx in match_ids:
                     })
         passshot_df = pd.concat([passshot_df, match_info_df])
 
-##############################################################################
+#%%
 # Plotting data
 # ----------------------------
 # We would like to investigate if there is any relation between number of passes and number of shots by a team in a game.
@@ -113,7 +113,7 @@ ax.set_xlabel('Passes (x)')
 ax.set_ylabel('Shots (y)')
 plt.show()
 
-##############################################################################
+#%%
 # Fitting linear regression
 # ----------------------------
 # We want to investigate the linear relationship between number of passes and number of shots. To do so, we fit the 
@@ -156,7 +156,7 @@ ax.spines['right'].set_visible(False)
 plt.show()
 
 
-##############################################################################
+#%%
 # Fitting Poisson regression
 # ----------------------------
 # We want to investigate the  relationship between number of passes and number of goals. To do so, we fit the 
@@ -197,7 +197,7 @@ ax.spines['right'].set_visible(False)
 plt.show()
 
 
-##############################################################################
+#%%
 # Comparative heatmaps
 # ----------------------------
 # We would like to find out which team outperformed and underperformed when it comes to the number of danger passes from different zones.
@@ -256,7 +256,9 @@ ax_cbar.yaxis.set_ticks_position('left')
 axs['title'].text(0.5, 0.5, 'Danger passes per game - performance above zone average', ha='center', va='center', fontsize=60)    
 plt.show() 
     
-   
+#%%
+
+#%% 
 
 
 

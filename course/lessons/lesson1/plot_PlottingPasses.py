@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mplsoccer import Pitch, Sbopen
 
-##############################################################################
+#%%
 # Opening the dataset
 # ----------------------------
 # We open the data, using SBopen, then we filter the dataframe so that only passes are left,
@@ -19,7 +19,7 @@ parser = Sbopen()
 df, related, freeze, tactics = parser.event(69301)
 passes = df.loc[df['type_name'] == 'Pass'].loc[df['sub_type_name'] != 'Throw-in'].set_index('id')
 
-##############################################################################
+#%%
 # Making the pass map using iterative solution
 # ----------------------------
 # Draw the pitch and iterate through the passes. We check if a pass was made by Lucy Bronze.
@@ -50,7 +50,7 @@ ax.set_title("Lucy Bronze passes against Sweden", fontsize = 24)
 fig.set_size_inches(10, 7)
 plt.show()
 
-##############################################################################
+#%%
 # Making the pass map using mplsoccer functions
 # ----------------------------
 # Again, we filter out passes made by Lucy Bronze.
@@ -71,7 +71,7 @@ pitch.scatter(df_pass.x, df_pass.y, alpha = 0.2, s = 500, color = "blue", ax=ax[
 fig.suptitle("Lucy Bronze passes against Sweden", fontsize = 30) 
 plt.show()
 
-##############################################################################
+#%%
 # Plotting multiple pass maps on one figure
 # ----------------------------
 # mplsoccer allows to draw multiple plots on one plot. Let's demonstrate how to do that by
@@ -111,3 +111,75 @@ for ax in axs['pitch'][-1, 16 - len(names):]:
 #Another way to set title using mplsoccer 
 axs['title'].text(0.5, 0.5, 'England passes against Sweden', ha='center', va='center', fontsize=30)
 plt.show()
+
+#%% multiple heatmaps
+
+# pitch = Pitch(line_color='black')
+# fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+#                      endnote_height=0.04, title_space=0, endnote_space=0)
+# #scatter the location on the pitch
+# pitch.scatter(df.x, df.y, s=100, color='blue', edgecolors='grey', linewidth=1, alpha=0.2, ax=ax["pitch"])
+# #uncomment it to plot arrows
+# #pitch.arrows(danger_passes2.x, danger_passes2.y, danger_passes2.end_x, danger_passes2.end_y, color = "blue", ax=ax['pitch'])
+# #add title
+# fig.suptitle('Location of danger passes by ' + team, fontsize = 30)
+# plt.show()
+
+# #get the 2D histogram 
+# bin_statistic = pitch.bin_statistic(danger_passes3.x, danger_passes3.y, statistic='count', bins=(6, 5), normalize=False)
+# #normalize by number of games
+# bin_statistic["statistic"] = bin_statistic["statistic"]/no_games
+# #make a heatmap
+# pcm  = pitch.heatmap(bin_statistic, cmap='Reds', edgecolor='grey', ax=ax['pitch'])
+# #legend to our plot
+# ax_cbar = fig.add_axes((1, 0.093, 0.03, 0.786))
+# cbar = plt.colorbar(pcm, cax=ax_cbar)
+# fig.suptitle('Danger passes by ' + danger_passes3.player_name.unique()[0] + " per game", fontsize = 30)
+# plt.show()
+
+
+#prepare the dataframe of passes by England that were no-throw ins
+mask_england = (df.type_name == 'Pass') & (df.team_name == "England Women's") & (df.sub_type_name != "Throw-in")
+df_passes = df.loc[mask_england, ['x', 'y', 'end_x', 'end_y', 'player_name']]
+#get the list of all players who made a pass
+names = df_passes['player_name'].unique()
+
+#draw 4x4 pitches
+pitch = Pitch(line_color='black', pad_top=20)
+fig, axs = pitch.grid(ncols = 4, nrows = 4, grid_height=0.85, title_height=0.06, axis=False,
+                     endnote_height=0.04, title_space=0.04, endnote_space=0.01)
+
+#for each player
+for name, ax in zip(names, axs['pitch'].flat[:len(names)]):
+    #put player name over the plot
+    ax.text(60, -10, name,
+            ha='center', va='center', fontsize=14)
+    #take only passes by this player
+    player_df = df_passes.loc[df_passes["player_name"] == name]
+    bin_statistic = pitch.bin_statistic(player_df.x, player_df.y, statistic='count', bins=(6, 5), normalize=False)
+    #make a heatmap
+    pcm  = pitch.heatmap(bin_statistic, cmap='Wistia', edgecolor='grey', ax=ax)
+    #scatter
+    pitch.scatter(player_df.x, player_df.y, alpha = 0.2, s = 50, color = "blue", ax=ax)
+    #plot arrow
+    pitch.arrows(player_df.x, player_df.y,
+            player_df.end_x, player_df.end_y, color = "blue", ax=ax, width=1)
+    
+#We have more than enough pitches - remove them
+for ax in axs['pitch'][-1, 16 - len(names):]:
+    ax.remove()
+
+#legend to our plot
+ax_cbar = fig.add_axes((1, 0.093, 0.03, 0.786))
+cbar = plt.colorbar(pcm, cax=ax_cbar)
+cbar.set_label('Passes per grid square', color='black', fontsize=12)
+
+#Another way to set title using mplsoccer 
+axs['title'].text(0.5, 0.5, 'England passes against Sweden', ha='center', va='center', fontsize=30)
+plt.show()
+
+
+
+
+
+

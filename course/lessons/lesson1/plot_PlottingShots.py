@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mplsoccer import Pitch, Sbopen, VerticalPitch
 
-##############################################################################
+#%%
 # Opening the dataset
 # ----------------------------
 # The first thing we have to do is open the data. We use a parser SBopen available in mplsoccer.
@@ -30,7 +30,7 @@ team1, team2 = df.team_name.unique()
 #A dataframe of shots
 shots = df.loc[df['type_name'] == 'Shot'].set_index('id')
     
-##############################################################################
+#%%
 # Making the shot map using iterative solution
 # ----------------------------
 # First let's draw the pitch using the `MPL Soccer class <https://mplsoccer.readthedocs.io/en/latest/gallery/pitch_setup/plot_pitches.html>`_,
@@ -82,7 +82,7 @@ fig.suptitle("England (red) and Sweden (blue) shots", fontsize = 24)
 fig.set_size_inches(10, 7)
 plt.show()
 
-##############################################################################
+#%%
 # Using mplsoccer's Pitch class
 # ----------------------------
 # This time we make a direct query to return only shots by each team.
@@ -128,7 +128,7 @@ for i, row in df_sweden.iterrows():
 fig.suptitle("England (red) and Sweden (blue) shots", fontsize = 30)           
 plt.show()
 
-##############################################################################
+#%%
 # Plotting shots on one half
 # ----------------------------
 # To plot shots of only one team on one half we use VerticalPitch() class
@@ -144,11 +144,73 @@ pitch.scatter(df_england.x, df_england.y, alpha = 1, s = 500, color = "red", ax=
 fig.suptitle("England shots against Sweden", fontsize = 30)           
 plt.show()
 
-##############################################################################
+#%%
 # Challenge - try it before looking at the next page
 # ----------------------------
 # 1) Create a dataframe of passes which contains all the passes in the match
 # 2) Plot the start point of every Sweden pass. Attacking left to right.
 # 3) Plot only passes made by Caroline Seger (she is Sara Caroline Seger in the database)
 # 4) Plot arrows to show where the passes went to.
+competitions = parser.competition()
+
+#%%
+
+df1, related, freeze, tactics = parser.event(69301)
+
+df_passes = df1[df1.type_name == 'Pass']
+
+#create pitch
+pitch = Pitch(line_color='black')
+fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                     endnote_height=0.04, title_space=0, endnote_space=0)
+
+df_sweden_pass = df_passes[df_passes.team_name == team2]
+
+pitch.scatter(df_sweden_pass.x, df_sweden_pass.y, alpha = 1, s = 200, c='blue', ax=ax['pitch'], edgecolors= 'black')
+fig.suptitle(f"{team2} passes against {team1}", fontsize = 30)           
+plt.show()
+
+#%%
+#create pitch
+pitch = Pitch(line_color='black')
+fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                     endnote_height=0.04, title_space=0, endnote_space=0)
+
+playerName = 'Sara Caroline Seger'
+df_Seger_pass = df_sweden_pass[df_sweden_pass.player_name == playerName]
+
+pitch.scatter(df_Seger_pass.x, df_Seger_pass.y, alpha = 1, s = 200, c='blue', ax=ax['pitch'], edgecolors= 'black')
+fig.suptitle(f"{team2}'s {playerName} passes against {team1}", fontsize = 25)           
+plt.show()
+
+#%%
+#create pitch
+pitch = Pitch(line_color='black')
+fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                     endnote_height=0.04, title_space=0, endnote_space=0)
+
+
+pitch.scatter(df_Seger_pass.x, df_Seger_pass.y, alpha = 1, s = 200, c='blue', ax=ax['pitch'], edgecolors= 'black')
+pitch.arrows(df_Seger_pass.x, df_Seger_pass.y, df_Seger_pass.end_x, df_Seger_pass.end_y, color='blue', ax=ax['pitch'])
+
+fig.suptitle(f"{team2}'s {playerName} passes against {team1}", fontsize = 25)           
+plt.show()
+
+#%%
+df1.columns
+
+#%%
+df1.type_name.unique()
+#%%
+
+
+
+
+#%%
+#%%
+
+
+#%%
+
+
 

@@ -43,7 +43,7 @@ import warnings
 pd.options.mode.chained_assignment = None
 warnings.filterwarnings('ignore')
 
-##############################################################################
+#%%
 # Opening data
 # ----------------------------
 # To fit the xG model we will use Wyscout data. To meet file size requirements of Github, we have to open it from different files,
@@ -58,7 +58,7 @@ for i in range(13):
         data = json.load(f)
     train = pd.concat([train, pd.DataFrame(data)])
       
-##############################################################################
+#%%
 # Preparing  data
 # ----------------------------
 # Exepcted goals model is build using only shots, so we keep only those actions which *subEventName* was *Shot*. Note that this way
@@ -80,7 +80,7 @@ shots["Angle"] = np.where(np.arctan(7.32 * shots["X"] / (shots["X"]**2 + shots["
 #if you ever encounter problems (like you have seen that model treats 0 as 1 and 1 as 0) while modelling - change the dependant variable to object 
 shots["Goal"] = shots.tags.apply(lambda x: 1 if {'id':101} in x else 0).astype(object)
 
-##############################################################################
+#%%
 # Plotting shot location
 # ----------------------------
 # Since we would like to investigate the relationship between shot location and goal location, first we create a heat map of all 
@@ -101,7 +101,7 @@ cbar = plt.colorbar(pcm, cax=ax_cbar)
 fig.suptitle('Shot map - 2017/2018 Premier League Season' , fontsize = 30)
 plt.show()
 
-##############################################################################
+#%%
 # Plotting goal location
 # ----------------------------
 # Having the shot location, we would also like to know where the goals were scored from.
@@ -123,7 +123,7 @@ fig.suptitle('Goal map - 2017/2018 Premier League Season' , fontsize = 30)
 plt.show()
 
 
-##############################################################################
+#%%
 # Plotting the probability of scoring a goal given the location
 # ----------------------------
 # Now, we can calculate the proportion of goals scored from each bin to number of shots from that location. 
@@ -143,7 +143,7 @@ cbar = plt.colorbar(pcm, cax=ax_cbar)
 fig.suptitle('Probability of scoring' , fontsize = 30)
 plt.show()
 
-##############################################################################
+#%%
 # Plotting a logistic curve
 # ----------------------------
 # Plotting logistic curve
@@ -162,7 +162,7 @@ ax.spines['right'].set_visible(False)
 plt.show()
 
 
-##############################################################################
+#%%
 # Investigating the relationship between goals and angle
 # ----------------------------
 # We want to find out if the angle influences scoring a goal. First we plot if goal was scored given
@@ -182,7 +182,7 @@ ax.set_yticklabels(['No','Yes'])
 plt.show()
 
 
-##############################################################################
+#%%
 # Investigating the relationship between probability of scoring goals and angle
 # ----------------------------
 # We want to find out if the angle influences the probability of scoring a goal. First we plot if goal was scored given
@@ -206,7 +206,7 @@ ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 plt.show()
 
-##############################################################################
+#%%
 # Fitting logistic regression with random coefficients
 # ----------------------------
 # To our data we fit a logistic regression curve with set parameters - 3 for intercept and -3 for angle. However, these are most likely
@@ -222,7 +222,7 @@ ax.plot(midangle, prob_goal, linestyle='none', marker= '.', markersize= 12, colo
 ax.plot(x, y, linestyle='solid', color='black')
 plt.show()
 
-##############################################################################
+#%%
 # Calculating log-likelihood
 # ----------------------------
 # The best parameters are those which maximize the log-likelihood.
@@ -260,7 +260,7 @@ ax.spines['right'].set_visible(False)
 plt.show()
 
 
-##############################################################################
+#%%
 # Fitting logistic regression and finding best parameters
 # ----------------------------
 # The best parameters are those which maximize the log-likelihood.
@@ -285,7 +285,7 @@ ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 plt.show()
 
-##############################################################################
+#%%
 # Investigating the relationship between probability of scoring goals and distance to goal 
 # ----------------------------
 # We want to find out if the distanse influences the probability of scoring a goal. First we plot the probability of scoring given
@@ -325,7 +325,7 @@ plt.show()
 
 
 
-##############################################################################
+#%%
 # Adding squared distance to the model
 # ----------------------------
 # To our model we can add more variables than only one. We can try adding distance to goal squared and see if it improves
@@ -354,7 +354,7 @@ ax.plot(middistance, xGprob, linestyle='solid', color='black')
 plt.show()
 
 
-##############################################################################
+#%%
 # Adding squared distance to the model
 # ----------------------------
 # To our model we can add more variables than only one. We can try adding distance to goal squared and see if it improves
@@ -423,7 +423,7 @@ plt.ylim((0,60))
 plt.gca().set_aspect('equal', adjustable='box')
 plt.show()
 
-##############################################################################
+#%%
 # Testing model fit
 # ----------------------------
 # Every time we make a model, it is important to test it. We test our logistic regression model using Mcfaddens Rsquared and 
@@ -466,7 +466,7 @@ plt.xlim((0.00, 1.00))
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-##############################################################################
+#%%
 # Challenge
 # ----------------------------
 # 1) Create different models for headers and non-headers (as suggested in `Measuring the Effectiveness of Playing Strategies at Soccer, Pollard (1997) <https://www.jstor.org/stable/2988603>`_)!

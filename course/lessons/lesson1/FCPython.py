@@ -78,6 +78,7 @@ def createPitch(length,width, unity,linecolor): # in meters
             ax.add_patch(rightArc)
             #Axis titles
 
+
     #check unity again
     elif unity == "yards":
         #check boundaries again
@@ -143,7 +144,7 @@ def createPitch(length,width, unity,linecolor): # in meters
     plt.axis('off')
     
     return fig,ax
-
+#%%
 
 def createPitchOld():
     #Taken from FC Python        
@@ -202,7 +203,7 @@ def createPitchOld():
     plt.axis('off')
     
     return fig,ax
-
+#%%
 def createGoalMouth():
     #Adopted from FC Python
     #Create figure
